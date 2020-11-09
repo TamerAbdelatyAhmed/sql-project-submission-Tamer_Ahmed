@@ -1,0 +1,56 @@
+1-Query 1: what is the name of the Artist who has the highest sales?
+
+
+select Customer.FirstName,Customer.LastName,Artist.Name Artist_Name,sum(InvoiceLine.UnitPrice*Quantity)as totalsales 
+from Customer 
+join Invoice 
+on Customer.CustomerId=Invoice.CustomerId
+join InvoiceLine 
+on Invoice.InvoiceId=InvoiceLine.InvoiceId 
+join Track 
+on InvoiceLine.TrackId=Track.TrackId 
+join Album on Album.AlbumId=Track.AlbumId 
+join Artist on Artist.ArtistId=Album.ArtistId 
+group by 3 order by 4 desc;
+
+2- Query 2: which customer spent the most on this artist?
+
+select a.Name as Name, sum(il.unitprice) as AmountSpent, c.Customerid, c.Firstname, c.lastname 
+from Artist a 
+Join Album al 
+ON al.Artistid = a.Artistid 
+Join Track t 
+ON t.Albumid = al.albumid 
+Join InvoiceLine il 
+ON il.Trackid = t.Trackid 
+Join Invoice i 
+ON i.Invoiceid = il.Invoiceid 
+Join Customer c 
+ON c.Customerid = i.Customerid 
+WHERE a.name = 'Iron Maiden' 
+Group by c.Customerid 
+Order by AmountSpent desc;
+
+3-Ouery 3: What is the city of the best Customer and who he is?
+
+SELECT Customer.FirstName, Customer.LastName, BillingCity, SUM(Total) as Total_Spent 
+FROM customer 
+join Invoice 
+on Customer.CustomerId = Invoice.CustomerId
+GROUP BY 1,2
+ORDER BY Total_Spent DESC;
+
+4-Query 4:Who is the best customer of Rock genre and what is his Email ?
+
+Select Customer.Email,Customer.FirstName,Customer.LastName,Genre.Name, Sum(Invoice.Total)
+FROM InvoiceLine 
+JOIN Invoice 
+ON InvoiceLine.InvoiceLineId=Invoice.InvoiceId 
+JOIN Customer 
+ON Invoice.CustomerId=Customer.CustomerId 
+JOIN Track 
+ON InvoiceLine.TrackId=Track.TrackId 
+JOIN Genre ON Track.GenreId=Genre.GenreId 
+where Genre.Name = "Rock"
+GROUP BY Customer.Email 
+ORDER BY 5 desc;
